@@ -1,7 +1,9 @@
 import requests
 import urllib3
 import pandas as pd
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
+from openpyxl.chart import LineChart, Reference
+from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -52,6 +54,7 @@ print(f"Total activities retrieved: {len(all_activities)}")
 
 # Data storage
 activity_data = []
+kudos_per_month = {}
 total_kudos = 0
 total_active_time = 0  # in seconds
 
@@ -60,6 +63,13 @@ for count, activity in enumerate(all_activities, start=1):
     activity_type = activity.get("type", "Unknown")
     moving_time = activity.get("moving_time", 0)  # in seconds
     kudos_count = activity.get("kudos_count", 0)
+    start_date = activity.get("start_date", None)
+    
+    # Convert start_date to month format
+    if start_date:
+        activity_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
+        month_str = activity_date.strftime("%Y-%m")  # Format YYYY-MM
+        kudos_per_month[month_str] = kudos_per_month.get(month_str, 0) + kudos_count
 
     # Convert moving_time from seconds to HH:MM:SS format
     hours, remainder = divmod(moving_time, 3600)
@@ -85,6 +95,11 @@ df_activities = pd.DataFrame(activity_data, columns=["Activity Number", "Activit
 df_totals = pd.DataFrame(
     [["Total Kudos", total_kudos], ["Total Active Time", formatted_total_time]],
     columns=["DataType", "Values"]
+)
+
+# Create a DataFrame for kudos per month
+df_kudos_per_month = pd.DataFrame(
+    list(kudos_per_month.items()), columns=["Month", "Kudos"]
 )
 
 # Save to Excel
