@@ -101,11 +101,18 @@ df_totals = pd.DataFrame(
 df_kudos_per_month = pd.DataFrame(
     list(kudos_per_month.items()), columns=["Month", "Kudos"]
 )
+df_kudos_per_month.sort_values("Month", inplace=True)
 
 # Save to Excel
 file_name = "Strava_Activities.xlsx"
 with pd.ExcelWriter(file_name, engine="openpyxl") as writer:
     df_activities.to_excel(writer, sheet_name="Activities", index=False)
     df_totals.to_excel(writer, sheet_name="Summary", index=False)
+    
+# Load the workbook to add a graph
+wb = load_workbook(file_name)
+ws =wb["Kudos Per Month"]
 
+# Create a line chart
+chart = LineChart()
 print(f"Data successfully written to {file_name}")
