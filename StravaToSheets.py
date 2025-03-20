@@ -115,4 +115,20 @@ ws =wb["Kudos Per Month"]
 
 # Create a line chart
 chart = LineChart()
+chart.title = "Kudos Over Time"
+chart.x_axis.title = "Month"
+chart.y_axis.title = "Kudos"
+
+# Define the data range for the chart
+data = Reference(ws, min_col=2, min_row=1, max_row=ws.max_row)
+categories = Reference(ws, min_col=1, min_row=2, max_row=ws.max_row)
+chart.add_data(data, title_from_data=True)
+chart.set_categories(categories)
+
+# Add chart to the worksheet
+ws.add_chart(chart,"D2")
+
+# Save the updated workbook
+wb.save(file_name)
+
 print(f"Data successfully written to {file_name}")
