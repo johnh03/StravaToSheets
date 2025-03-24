@@ -55,6 +55,7 @@ print(f"Total activities retrieved: {len(all_activities)}")
 # Data storage
 activity_data = []
 kudos_per_month = {}
+activities_per_month = {}
 total_kudos = 0
 total_active_time = 0  # in seconds
 
@@ -64,12 +65,17 @@ for count, activity in enumerate(all_activities, start=1):
     moving_time = activity.get("moving_time", 0)  # in seconds
     kudos_count = activity.get("kudos_count", 0)
     start_date = activity.get("start_date", None)
-    
+
     # Convert start_date to month format
     if start_date:
         activity_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
         month_str = activity_date.strftime("%Y-%m")  # Format YYYY-MM
+        
+        # Store kudos count
         kudos_per_month[month_str] = kudos_per_month.get(month_str, 0) + kudos_count
+        
+        # Count activities per month
+        activities_per_month[month_str] = activities_per_month.get(month_str, 0) + 1
 
     # Convert moving_time from seconds to HH:MM:SS format
     hours, remainder = divmod(moving_time, 3600)
@@ -88,47 +94,53 @@ total_hours, remainder = divmod(total_active_time, 3600)
 total_minutes, total_seconds = divmod(remainder, 60)
 formatted_total_time = f"{total_hours:02}:{total_minutes:02}:{total_seconds:02}"
 
-# Create a DataFrame for activity data
+# Create DataFrames
 df_activities = pd.DataFrame(activity_data, columns=["Activity Number", "Activity Name", "Activity Type", "Active Time", "Kudos"])
-
-# Create a DataFrame for totals
 df_totals = pd.DataFrame(
     [["Total Kudos", total_kudos], ["Total Active Time", formatted_total_time]],
     columns=["DataType", "Values"]
 )
-
-# Create a DataFrame for kudos per month
-df_kudos_per_month = pd.DataFrame(
-    list(kudos_per_month.items()), columns=["Month", "Kudos"]
-)
+df_kudos_per_month = pd.DataFrame(list(kudos_per_month.items()), columns=["Month", "Kudos"])
 df_kudos_per_month.sort_values("Month", inplace=True)
+df_activities_per_month = pd.DataFrame(list(activities_per_month.items()), columns=["Month", "Activities"])
+df_activities_per_month.sort_values("Month", inplace=True)
 
 # Save to Excel
 file_name = "Strava_Activities.xlsx"
 with pd.ExcelWriter(file_name, engine="openpyxl") as writer:
     df_activities.to_excel(writer, sheet_name="Activities", index=False)
     df_totals.to_excel(writer, sheet_name="Summary", index=False)
-    
-# Load the workbook to add a graph
+    df_kudos_per_month.to_excel(writer, sheet_name="Kudos Per Month", index=False)
+    df_activities_per_month.to_excel(writer, sheet_name="Activities Per Month", index=False)
+
+# Load workbook to add charts
 wb = load_workbook(file_name)
-ws =wb["Kudos Per Month"]
 
-# Create a line chart
-chart = LineChart()
-chart.title = "Kudos Over Time"
-chart.x_axis.title = "Month"
-chart.y_axis.title = "Kudos"
+# Kudos Per Month Chart
+ws_kudos = wb["Kudos Per Month"]
+chart_kudos = LineChart()
+chart_kudos.title = "Kudos Over Time"
+chart_kudos.x_axis.title = "Month"
+chart_kudos.y_axis.title = "Kudos"
+data_kudos = Reference(ws_kudos, min_col=2, min_row=1, max_row=ws_kudos.max_row)
+categories_kudos = Reference(ws_kudos, min_col=1, min_row=2, max_row=ws_kudos.max_row)
+chart_kudos.add_data(data_kudos, titles_from_data=True)
+chart_kudos.set_categories(categories_kudos)
+ws_kudos.add_chart(chart_kudos, "D2")
 
-# Define the data range for the chart
-data = Reference(ws, min_col=2, min_row=1, max_row=ws.max_row)
-categories = Reference(ws, min_col=1, min_row=2, max_row=ws.max_row)
-chart.add_data(data, title_from_data=True)
-chart.set_categories(categories)
-
-# Add chart to the worksheet
-ws.add_chart(chart,"D2")
+# Activities Per Month Chart
+ws_activities = wb["Activities Per Month"]
+chart_activities = LineChart()
+chart_activities.title = "Activities Per Month"
+chart_activities.x_axis.title = "Month"
+chart_activities.y_axis.title = "Number of Activities"
+data_activities = Reference(ws_activities, min_col=2, min_row=1, max_row=ws_activities.max_row)
+categories_activities = Reference(ws_activities, min_col=1, min_row=2, max_row=ws_activities.max_row)
+chart_activities.add_data(data_activities, titles_from_data=True)
+chart_activities.set_categories(categories_activities)
+ws_activities.add_chart(chart_activities, "D2")
 
 # Save the updated workbook
 wb.save(file_name)
 
-print(f"Data successfully written to {file_name}")
+print(f"Data and charts successfully written to {file_name}")
