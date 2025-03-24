@@ -1,9 +1,9 @@
-import requests
-import urllib3
-import pandas as pd
-from openpyxl import Workbook, load_workbook
-from openpyxl.chart import LineChart, Reference
-from datetime import datetime
+import requests  # For making HTTP requests to Strava API
+import urllib3  # To handle SSL warnings for HTTP requests
+import pandas as pd  # For handling and processing tabular data
+from openpyxl import Workbook, load_workbook  # For creating and editing Excel files
+from openpyxl.chart import LineChart, Reference  # For adding charts to Excel
+from datetime import datetime  # For working with activity timestamps and formatting dates
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -139,6 +139,31 @@ categories_activities = Reference(ws_activities, min_col=1, min_row=2, max_row=w
 chart_activities.add_data(data_activities, titles_from_data=True)
 chart_activities.set_categories(categories_activities)
 ws_activities.add_chart(chart_activities, "D2")
+
+# Kudos vs Activities Per Month Chart
+ws_combined = wb.create_sheet(title="Kudos vc Activities")
+
+# Combine data into one sheet
+ws_combined.append(["Month", "Kudos", "Activities"])
+for month in sorted(set(kudos_per_month.keys()).union(set(activities_per_month.keys()))):
+    ws_combined.append([
+        month,
+        kudos_per_month.get(month, 0),
+        activities_per_month.get(month, 0)
+    ])
+
+# Create a line chart
+chart_combined = LineChart()
+chart_combined.title = "Kudos vs Activities Per Month"
+chart_combined.x_axis.title = "Month"
+chart_combined.y_axis.title = "Count"
+
+data_combined = Reference(ws_combined, min_col=2, min_row=1, max_col=3, max_row=ws_combined.max_row)
+categories_combined = Reference(ws_combined, min_col=1, min_row=2, max_row=ws_combined.max_row)
+chart_combined.add_data(data_combined, titles_from_data=True)
+chart_combined.set_categories(categories_combined)
+
+ws_combined.add_chart(chart_combined, "E2")
 
 # Save the updated workbook
 wb.save(file_name)
