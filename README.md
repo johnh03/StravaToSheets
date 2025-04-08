@@ -6,14 +6,21 @@ A Python program that uses the Strava API to fetch a user's activity data and ex
 
 ## ⚡ Setup Instructions  
 
-Before running the program, you must set up the Strava API. Using **Postman** is recommended, but you can also refer to the [Strava Developers Portal](https://developers.strava.com) for a more detailed guide.
+Before running the program, you must set up the Strava API. Using **Postman** is recommended, but you can also refer to the [Strava Developers Portal](https://developers.strava.com) for a more detailed guide. Please read through this whole guide before starting to set up the Strava API, feel free to come back to this guide as reference if needed.
+
 It is also recommended to use a notepad or txt file to keep your information.
 
 ### 🔹 1. Create a Strava API Application  
 
 1. Go to [Strava Developers Portal](https://developers.strava.com) and click **"Create & Manage Your App"**  
-2. Sign into Strava and create an API application  
-3. Take note of the following credentials:
+2. Sign into Strava and create an API application
+   - Application name will be temporary, so feel free to use anyname as a placeholder
+   - You will also need an image as your Application Icon, again this can be a placeholder for now
+   - As for the category of the application, Visualizer is the most fit category for this application
+   - Website can be a temporary or fake website (https://example.com)
+   - The Application Description can be set to whatever you'd like
+   - Authorization Callback Domain has to be set to 'localhost'
+4. Take note of the following credentials:
    - **Client ID** – Your application ID  
    - **Client Secret** – Your client secret (**keep this confidential**)  
    - **Authorization Token** – Expires every six hours (**keep this confidential**)  
@@ -37,7 +44,10 @@ It is also recommended to use a notepad or txt file to keep your information.
    ```
    Authorization Code: YOUR_CODE
    ```
-
+Note: The URL will look something like this, where the NEW_AUTHORIZATION_CODE will be where your new authorization code will be.
+```
+http://localhost/?state=&code=NEW_AUTHORIZATION_CODE&scope=read,activity:read_all
+```
 ---
 
 ### 🔹 3. Exchange the Authorization Code for Tokens  
@@ -47,17 +57,17 @@ It is also recommended to use a notepad or txt file to keep your information.
    ```
    https://www.strava.com/oauth/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=YOUR_CODE&grant_type=authorization_code
    ```
-
+- Be sure to replace the CLIENT_ID and CLIENT_SECRET and YOUR_CODE with your client ID, client secret, and the new authorization code you got in the previous step
 2. Save the returned **refresh token** and **access token**:  
 
    ```
    Refresh Token: REFRESH_TOKEN
    Access Token: ACCESS_TOKEN
    ```
-
+- Steps after this will be optional if you would like to see the unparsed information from strava and learn how to get a new authorization code.
 ---
 
-### 🔹 4. Fetch Activities Using the Access Token  
+### 🔹 4. Fetch Activities Using the Access Token  **(Optional)**
 
 Use **Postman** to send a `GET` request:  
 
@@ -69,7 +79,7 @@ This will return a **JSON response** containing all of the user's activities.
 
 ---
 
-### 🔹 5. Refresh the Access Token  
+### 🔹 5. Refresh the Access Token  **(Optional)**
 
 Since the access token expires, use the refresh token to generate a new one.  
 Send a `POST` request to:  
@@ -96,14 +106,17 @@ The program will generate an **Excel spreadsheet** with:
 ✔ **Activity name, type, and duration**  
 ✔ **Kudos received**  
 ✔ **Summary page** with total kudos and total time spent  
-
+✔ **Kudos Per Month** chart with kudos recieved per month
+✔ **Activities Per Month** chart with all logged activities per month
+✔ **Kudos vs Activities Per Month** chart to compare activities logged and kudos gained per month
+✔ **Activities Map** that contains every activity with GPS map information logged on your Strava profile
 ---
 
 ### 🎯 Notes  
 
 - The setup process is **one-time only**; the script will handle token refreshing automatically.  
 - Keep your **Client Secret, Authorization Token, and Refresh Token confidential** to prevent unauthorized access.
-- Make sure you have all the libraries used in the .py file, use the following command in command prompt to ensure they are installed
+- Make sure you have all the libraries used in the python file, use the following command in command prompt to ensure they are installed
 
 ```
 py -m pip install --force-reinstall requests urllib3 pandas openpyxl folium polyline
