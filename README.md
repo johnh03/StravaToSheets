@@ -7,6 +7,7 @@ A Python program that uses the Strava API to fetch a user's activity data and ex
 ## ⚡ Setup Instructions  
 
 Before running the program, you must set up the Strava API. Using **Postman** is recommended, but you can also refer to the [Strava Developers Portal](https://developers.strava.com) for a more detailed guide.
+It is also recommended to use a notepad or txt file to keep your information.
 
 ### 🔹 1. Create a Strava API Application  
 
@@ -41,7 +42,7 @@ Before running the program, you must set up the Strava API. Using **Postman** is
 
 ### 🔹 3. Exchange the Authorization Code for Tokens  
 
-1. Use **Postman** (or any API tool) to send a `POST` request to:  
+1. Use **[Postman](https://www.postman.com)** (or any API tool) to send a `POST` request to:  
 
    ```
    https://www.strava.com/oauth/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=YOUR_CODE&grant_type=authorization_code
@@ -88,7 +89,7 @@ Once setup is complete:
 
 1. Open `StravaToSheets.py`  
 2. Replace `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` with your credentials  
-3. Run the script  
+3. Run the script
 
 The program will generate an **Excel spreadsheet** with:  
 ✔ **Activity list** (most recent to least)  
@@ -101,6 +102,7 @@ The program will generate an **Excel spreadsheet** with:
 ### 🎯 Notes  
 
 - The setup process is **one-time only**; the script will handle token refreshing automatically.  
-- Keep your **Client Secret, Authorization Token, and Refresh Token confidential** to prevent unauthorized access.  
+- Keep your **Client Secret, Authorization Token, and Refresh Token confidential** to prevent unauthorized access.
+- Make sure you have all the libraries used in the .py file
 
 ---
