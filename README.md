@@ -110,6 +110,7 @@ The program will generate an **Excel spreadsheet** with:
 ✔ **Activities Per Month** chart with all logged activities per month
 ✔ **Kudos vs Activities Per Month** chart to compare activities logged and kudos gained per month
 ✔ **Activities Map** that contains every activity with GPS map information logged on your Strava profile
+
 ---
 
 ### 🎯 Notes  
