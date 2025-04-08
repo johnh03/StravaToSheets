@@ -106,10 +106,10 @@ The program will generate an **Excel spreadsheet** with:
 ✔ **Activity name, type, and duration**  
 ✔ **Kudos received**  
 ✔ **Summary page** with total kudos and total time spent  
-✔ **Kudos Per Month** chart with kudos recieved per month
-✔ **Activities Per Month** chart with all logged activities per month
-✔ **Kudos vs Activities Per Month** chart to compare activities logged and kudos gained per month
-✔ **Activities Map** that contains every activity with GPS map information logged on your Strava profile
+✔ **Kudos Per Month** chart with kudos recieved per month   
+✔ **Activities Per Month** chart with all logged activities per month   
+✔ **Kudos vs Activities Per Month** chart to compare activities logged and kudos gained per month   
+✔ **Activities Map** that contains every activity with GPS map information logged on your Strava profile   
 
 ---
 
