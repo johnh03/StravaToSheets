@@ -4,6 +4,8 @@ import pandas as pd  # For handling and processing tabular data
 from openpyxl import Workbook, load_workbook  # For creating and editing Excel files
 from openpyxl.chart import LineChart, Reference  # For adding charts to Excel
 from datetime import datetime  # For working with activity timestamps and formatting dates
+import folium # For creating interactive maps
+import polyline # For decoding Strava's encoded data route data into GPS coordinates
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -169,3 +171,36 @@ ws_combined.add_chart(chart_combined, "E2")
 wb.save(file_name)
 
 print(f"Data and charts successfully written to {file_name}")
+
+# Generate Map
+map_center = [0, 0] # Default center, will adjust dynamically
+valid_routes = 0
+m = folium.Map(location=map_center,
+               zoom_start = 12,
+               tiles="OpenStreetMap",
+               control_scale=True,
+               world_copy_jump=False, # Presents wrapping of the map
+               no_warp=True, # Disables the infinite scrolling of the map
+               max_bounds=[[-90,-180],[90,180]]
+)
+
+for activity in all_activities:
+    encoded_polyline = activity.get("map", {}).get("summary_polyline", None)
+
+    if encoded_polyline:
+        coordinates = polyline.decode(encoded_polyline) #Decode polyline to GPS coordinates
+        folium.Polyline(coordinates, color="red", weight=2.5, opacity=0.8).add_to(m)
+        valid_routes += 1
+
+# Adjust the map center if these are valid routes
+if valid_routes > 0:
+    first_route = polyline.decode(all_activities[0].get("map", {}).get("summary_polyline", ""))
+    if first_route:
+        map_center = first_route[0]
+        m.location = map_center
+
+# Save map to file
+map_filename= "strava_activities_map.html"
+m.save(map_filename)
+
+print(f"Map saved as {map_filename}")
