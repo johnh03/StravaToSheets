@@ -103,6 +103,10 @@ The program will generate an **Excel spreadsheet** with:
 
 - The setup process is **one-time only**; the script will handle token refreshing automatically.  
 - Keep your **Client Secret, Authorization Token, and Refresh Token confidential** to prevent unauthorized access.
-- Make sure you have all the libraries used in the .py file
+- Make sure you have all the libraries used in the .py file, use the following command in command prompt to ensure they are installed
+
+```
+py -m pip install --force-reinstall requests urllib3 pandas openpyxl folium polyline
+```
 
 ---
