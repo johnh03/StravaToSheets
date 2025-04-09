@@ -34,8 +34,14 @@ def get_credentials():
         with open(CREDENTIALS_FILE, "w") as f:
             json.dump(creds, f)
 
+        nonlocal saved_credentials
+        saved_credentials = creds
+
         root.destroy()
 
+    saved_credentials = {}
+
+    # Load if exists
     creds = {}
     if os.path.exists(CREDENTIALS_FILE):
         with open(CREDENTIALS_FILE, "r") as f:
@@ -65,7 +71,9 @@ def get_credentials():
 
     root.mainloop()
 
-    return creds.get("client_id"), creds.get("client_secret"), creds.get("refresh_token")
+    # Return credentials from saved GUI input
+    return saved_credentials.get("client_id", ""), saved_credentials.get("client_secret", ""), saved_credentials.get("refresh_token", "")
+
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
