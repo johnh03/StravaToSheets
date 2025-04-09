@@ -120,7 +120,7 @@ The program will generate an **Excel spreadsheet** with:
 - Make sure you have all the libraries used in the python file, use the following command in command prompt to ensure they are installed
 
 ```
-py -m pip install --force-reinstall requests urllib3 pandas openpyxl folium polyline tkinter json os
+py -m pip install --force-reinstall requests urllib3 pandas openpyxl folium polyline tk
 ```
 
 ---
