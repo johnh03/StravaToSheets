@@ -6,6 +6,7 @@ from openpyxl.chart import LineChart, Reference  # For adding charts to Excel
 from datetime import datetime  # For working with activity timestamps and formatting dates
 import folium # For creating interactive maps
 import polyline # For decoding Strava's encoded data route data into GPS coordinates
+from openpyxl.utils import get_column_letter # Adjusts column widths within Excel Sheet
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -119,6 +120,43 @@ with pd.ExcelWriter(file_name, engine="openpyxl") as writer:
 
 # Load workbook to add charts
 wb = load_workbook(file_name)
+
+# Adjust column widths for "Activities" sheet
+ws_activities_auto = wb["Activities"]
+
+for column_cells in ws_activities_auto.columns:
+    max_lenth = 0
+    column = column_cells[0].column
+    column_letter = get_column_letter(column)
+
+    for cell in column_cells:
+        try:
+            cell_value = str(cell.value)
+            if cell_value:
+                max_lenth = max(max_lenth, len(cell_value))
+        except:
+            pass
+    adjusted_width = max_lenth + 2
+    ws_activities_auto.column_dimensions[column_letter].width = adjusted_width
+
+# Adjust column widths for "Summary" sheet
+ws_summary_auto = wb["Summary"]
+
+for column_cells in ws_summary_auto.columns:
+    max_lenth = 0
+    column = column_cells[0].column
+    column_letter = get_column_letter(column)
+
+    for cell in column_cells:
+        try:
+            cell_value = str(cell.value)
+            if cell_value:
+                max_lenth = max(max_lenth, len(cell_value))
+        except:
+            pass
+    adjusted_width = max_lenth
+    ws_summary_auto.column_dimensions[column_letter].width = adjusted_width
+
 
 # Kudos Per Month Chart
 ws_kudos = wb["Kudos Per Month"]
