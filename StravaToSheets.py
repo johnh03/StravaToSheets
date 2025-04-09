@@ -229,7 +229,7 @@ for activity in all_activities:
 
     if encoded_polyline:
         coordinates = polyline.decode(encoded_polyline) #Decode polyline to GPS coordinates
-        folium.Polyline(coordinates, color="red", weight=2.5, opacity=0.8).add_to(m)
+        folium.PolyLine(coordinates, color="red", weight=2.5, opacity=0.8).add_to(m)
         valid_routes += 1
 
 # Adjust the map center if these are valid routes
