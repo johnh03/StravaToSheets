@@ -64,6 +64,9 @@ http://localhost/?state=&code=NEW_AUTHORIZATION_CODE&scope=read,activity:read_al
    Refresh Token: REFRESH_TOKEN
    Access Token: ACCESS_TOKEN
    ```
+3. Install StravaGUI.py then in your downloads folder, right click StravaGUI.py and click open with, then open with python
+   - Here you will be asked to put in your CLIENT_ID, CLIENT_SECRET, and REFRESH_TOKEN
+   - Put in your credentials in the respective boxes then press run
 - Steps after this will be optional if you would like to see the unparsed information from strava and learn how to get a new authorization code.
 ---
 
@@ -93,13 +96,13 @@ https://www.strava.com/oauth/token?client_id=CLIENT_ID&client_secret=CLIENT_SECR
 
 ---
 
-## 🚀 Running the Program  
+## 🚀 Running the Program  (Alternate Method)
 
 Once setup is complete:  
 
-1. Open `StravaToSheets.py`  
+1. Open `StravaToSheets.py` using any kind of IDE   
 2. Replace `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` with your credentials  
-3. Run the script
+3. Run the script   
 
 The program will generate an **Excel spreadsheet** with:  
 ✔ **Activity list** (most recent to least)  
