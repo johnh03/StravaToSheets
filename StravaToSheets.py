@@ -72,12 +72,14 @@ for count, activity in enumerate(all_activities, start=1):
     if start_date:
         activity_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ")
         month_str = activity_date.strftime("%Y-%m")  # Format YYYY-MM
-        
+        formatted_date = activity_date.strftime("%Y-%m-%d") # Format for Excel sheet
         # Store kudos count
         kudos_per_month[month_str] = kudos_per_month.get(month_str, 0) + kudos_count
         
         # Count activities per month
         activities_per_month[month_str] = activities_per_month.get(month_str, 0) + 1
+    else:
+        formatted_time = "N/A"
 
     # Convert moving_time from seconds to HH:MM:SS format
     hours, remainder = divmod(moving_time, 3600)
