@@ -2,13 +2,13 @@
 ---
 # StravaToSheets
 
-A Python program that uses the Strava API to fetch a user's activity data and export it to a local Excel sheet. The spreadsheet includes activity type, time spent, and kudos received.
+A Python program that uses the Strava API to fetch a user's activity data and export it to a local Excel sheet. The spreadsheet includes activity type, time spent, and kudos received. There is also a feature that creates a map using the GPS data from every activity that contains map data.
 
 ## ⚡ Setup Instructions  
 
 Before running the program, you must set up the Strava API. Using **Postman** is recommended, but you can also refer to the [Strava Developers Portal](https://developers.strava.com) for a more detailed guide. Please read through this whole guide before starting to set up the Strava API, feel free to come back to this guide as reference if needed.
 
-It is also recommended to use a notepad or txt file to keep your information.
+It is also recommended to use a notepad or text file to keep your information.
 
 ### 🔹 1. Create a Strava API Application  
 
